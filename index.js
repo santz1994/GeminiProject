@@ -155,7 +155,7 @@ app.post('/api/chat', async (req, res) => {
             contents,
             config: {
                 temperature,
-                systemInstruction: "Jawab hanya menggunakan bahasa Indonesia.",
+                systemInstruction,
             },
         });
 

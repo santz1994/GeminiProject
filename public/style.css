@@ -90,6 +90,12 @@ body::after {
   gap: 24px;
 }
 
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
 .panel {
   background: var(--panel);
   border: 1px solid var(--border);
@@ -128,12 +134,14 @@ label {
 
 select,
 input[type="text"],
+textarea,
 input[type="range"] {
   font-family: inherit;
 }
 
 select,
-input[type="text"] {
+input[type="text"],
+textarea {
   padding: 12px 14px;
   border-radius: 14px;
   border: 1px solid var(--border);
@@ -141,10 +149,35 @@ input[type="text"] {
   font-size: 0.95rem;
 }
 
+textarea {
+  resize: vertical;
+  min-height: 88px;
+}
+
+input[type="file"] {
+  border: 1px dashed var(--border);
+  background: #fff;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+}
+
 .helper {
   font-size: 0.82rem;
   color: var(--muted);
   margin: 0;
+}
+
+.usecase-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(255, 106, 77, 0.15);
+  color: #5b2318;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: 1px solid rgba(255, 106, 77, 0.3);
 }
 
 .slider-field .slider-row {
@@ -217,6 +250,76 @@ input[type="range"] {
 
 .switch input:checked + .slider::before {
   transform: translateX(24px);
+}
+
+.composer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mode-switch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mode-btn {
+  border: 1px solid var(--border);
+  background: #fff;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mode-btn.active {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+
+.mode-fields {
+  display: grid;
+  gap: 10px;
+}
+
+.file-field {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.file-field.is-visible {
+  display: flex;
+}
+
+.result-box {
+  min-height: 70px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px dashed var(--border);
+  background: #f8f4ee;
+  font-size: 0.9rem;
+  color: var(--muted);
+  white-space: pre-wrap;
+}
+
+.result-box.compact {
+  min-height: 60px;
+}
+
+.result-box.loading {
+  border-style: solid;
+  color: var(--ink);
+  background: #fff2e6;
+}
+
+.result-box.error {
+  border-color: #f2b8b8;
+  background: #ffecec;
+  color: #7a2323;
 }
 
 .chat-card {
@@ -327,14 +430,16 @@ input[type="range"] {
 .chat-form {
   display: flex;
   gap: 12px;
+  align-items: flex-end;
 }
 
-.chat-form input[type="text"] {
+.chat-form textarea {
   flex: 1;
   padding: 14px 16px;
-  border-radius: 999px;
+  border-radius: 18px;
   border: 1px solid var(--border);
   font-size: 1rem;
+  min-height: 54px;
 }
 
 .chat-form button {

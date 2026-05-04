@@ -11,7 +11,7 @@
     <header class="hero">
       <p class="eyebrow">Gemini Flash API</p>
       <h1>AI Chatbot Studio</h1>
-      <p class="subtitle">Buat bot dengan gaya bahasa, domain, dan memory yang bisa diatur untuk demo use case nyata.</p>
+      <p class="subtitle">Demo khusus customer service bot dengan gaya bahasa, domain, dan memory yang bisa diatur.</p>
     </header>
 
     <div class="layout">
@@ -22,14 +22,9 @@
         </div>
 
         <div class="field">
-          <label for="use-case">Use case</label>
-          <select id="use-case">
-            <option value="customer service bot">Customer service bot</option>
-            <option value="education bot">Education bot</option>
-            <option value="travel assistant">Travel assistant</option>
-            <option value="personal productivity assistant">Personal productivity assistant</option>
-            <option value="general assistant" selected>General assistant</option>
-          </select>
+          <label>Use case</label>
+          <div class="usecase-pill">Customer service bot</div>
+          <p class="helper">Use case ditetapkan agar demo lebih fokus.</p>
         </div>
 
         <div class="field">
@@ -79,33 +74,64 @@
         </div>
       </section>
 
-      <section class="panel chat-card">
-        <div class="chat-header">
-          <div>
-            <h2>Ruang Chat</h2>
-            <p class="muted">Tulis pesan, lalu lihat bot merespons sesuai persona.</p>
+      <div class="stack">
+        <section class="panel chat-card">
+          <div class="chat-header">
+            <div>
+              <h2>Ruang Chat</h2>
+              <p class="muted">Tulis pesan, lalu lihat bot merespons sesuai persona.</p>
+            </div>
+            <button id="clear-chat" type="button" class="ghost">Reset</button>
           </div>
-          <button id="clear-chat" type="button" class="ghost">Reset</button>
-        </div>
 
-        <div id="chat-box" class="chat-box">
-          <div class="empty-state">
-            Mulai percakapan untuk melihat jawaban bot di sini.
+          <div id="chat-box" class="chat-box">
+            <div class="empty-state">
+              Mulai percakapan untuk melihat jawaban bot di sini.
+            </div>
           </div>
-        </div>
 
-        <div class="quick-prompts">
-          <button type="button" class="prompt-btn" data-prompt="Buat skrip sapaan untuk customer service toko online.">CS greeting</button>
-          <button type="button" class="prompt-btn" data-prompt="Jelaskan konsep pomodoro untuk pelajar SMA.">Edukasi</button>
-          <button type="button" class="prompt-btn" data-prompt="Buat itinerary 2 hari di Bandung dengan budget terbatas.">Travel</button>
-          <button type="button" class="prompt-btn" data-prompt="Tolong buatkan daftar tugas harian yang rapi untuk pekerja remote.">Produktivitas</button>
-        </div>
+          <div class="quick-prompts">
+            <button type="button" class="prompt-btn" data-prompt="Buat skrip sapaan untuk pelanggan baru di toko online.">Sapaan awal</button>
+            <button type="button" class="prompt-btn" data-prompt="Bagaimana cara menangani komplain barang rusak dengan empatik?">Komplain</button>
+            <button type="button" class="prompt-btn" data-prompt="Buat template balasan untuk pertanyaan status pengiriman.">Status kirim</button>
+            <button type="button" class="prompt-btn" data-prompt="Susun FAQ singkat tentang kebijakan retur dan refund.">FAQ retur</button>
+          </div>
 
-        <form id="chat-form" class="chat-form">
-          <input type="text" id="user-input" placeholder="Ketik pesan kamu di sini..." autocomplete="off" required />
-          <button type="submit" id="send-btn">Kirim</button>
-        </form>
-      </section>
+          <div class="composer">
+            <div class="mode-switch" role="tablist" aria-label="Mode generator">
+              <button type="button" class="mode-btn active" data-mode="chat">Chat</button>
+              <button type="button" class="mode-btn" data-mode="text">Text</button>
+              <button type="button" class="mode-btn" data-mode="image">Image</button>
+              <button type="button" class="mode-btn" data-mode="document">Doc</button>
+              <button type="button" class="mode-btn" data-mode="audio">Audio</button>
+            </div>
+
+            <div class="mode-fields">
+              <div class="file-field" data-mode="image">
+                <label for="image-file">Upload gambar</label>
+                <input type="file" id="image-file" accept="image/*" />
+              </div>
+              <div class="file-field" data-mode="document">
+                <label for="document-file">Upload dokumen</label>
+                <input type="file" id="document-file" accept=".pdf,.doc,.docx,.txt" />
+              </div>
+              <div class="file-field" data-mode="audio">
+                <label for="audio-file">Upload audio</label>
+                <input type="file" id="audio-file" accept="audio/*" />
+              </div>
+            </div>
+
+            <form id="composer-form" class="chat-form">
+              <textarea id="user-input" rows="2" placeholder="Ketik pesan kamu di sini..." autocomplete="off"></textarea>
+              <button type="submit" id="send-btn">Kirim</button>
+            </form>
+
+            <div id="tool-result" class="result-box compact" aria-live="polite">
+              Pilih mode text/image/doc/audio untuk output generator.
+            </div>
+          </div>
+        </section>
+      </div>
     </div>
   </div>
 
