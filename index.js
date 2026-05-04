@@ -2,10 +2,13 @@ import 'dotenv/config';
 import express from 'express';
 import multer from 'multer';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { GoogleGenAI } from '@google/genai';
 
 const app = express();
 const upload = multer();
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
@@ -15,6 +18,7 @@ const GEMINI_MODEL = "gemini-2.5-flash";
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server ready on http://localhost:${PORT}`));
@@ -96,23 +100,65 @@ app.post("/generate-from-audio", upload.single("audio"), async (req, res) => {
 });
 
 app.post('/api/chat', async (req, res) => {
-    const { conversation } = req.body;
+    const { conversation, options = {} } = req.body;
+
     try {
         if (!Array.isArray(conversation)) throw new Error("Conversation must be an array of messages.");
 
-        const contents = conversation.map(({ role, text }) => ({
-            role,
-            parts: [{ text }]
-        }));
+        const normalizeText = (value, maxLen) => {
+            if (typeof value !== 'string') return '';
+            return value.trim().slice(0, maxLen);
+        };
+
+        const style = normalizeText(options.style, 60) || 'ramah dan jelas';
+        const domain = normalizeText(options.domain, 80) || 'umum';
+        const useCase = normalizeText(options.useCase, 80) || 'assistant serbaguna';
+        const includeRecommendations = Boolean(options.includeRecommendations);
+        const useMemory = options.useMemory !== false;
+        const temperatureValue = Number(options.temperature);
+        const temperature = Number.isFinite(temperatureValue)
+            ? Math.min(Math.max(temperatureValue, 0.1), 1.2)
+            : 0.7;
+
+        const systemInstruction = [
+            'Jawab hanya menggunakan bahasa Indonesia.',
+            `Gaya bahasa: ${style}.`,
+            `Use case: ${useCase}.`,
+            domain !== 'umum' ? `Fokus pengetahuan: ${domain}.` : null,
+            includeRecommendations
+                ? 'Setelah jawaban, berikan 2-3 rekomendasi tindak lanjut dalam poin singkat.'
+                : null,
+            'Jika pertanyaan kurang jelas, ajukan pertanyaan klarifikasi singkat.',
+        ].filter(Boolean).join(' ');
+
+        const normalizedConversation = conversation
+            .filter((item) => item && typeof item.text === 'string')
+            .map(({ role, text }) => ({
+                role: role === 'model' ? 'model' : 'user',
+                parts: [{ text: text.trim() }],
+            }));
+
+        if (normalizedConversation.length === 0) {
+            throw new Error("Conversation tidak boleh kosong.");
+        }
+
+        const lastUserMessage = [...normalizedConversation]
+            .reverse()
+            .find((item) => item.role === 'user');
+
+        const contents = useMemory
+            ? normalizedConversation
+            : (lastUserMessage ? [lastUserMessage] : normalizedConversation.slice(-1));
 
         const response = await ai.models.generateContent({
             model: GEMINI_MODEL,
             contents,
             config: {
-                temperature: 0.9,
+                temperature,
                 systemInstruction: "Jawab hanya menggunakan bahasa Indonesia.",
             },
         });
+
         res.status(200).json({ result: response.text });
     } catch (e) {
         res.status(500).json({ message: e.message });

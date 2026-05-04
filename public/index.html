@@ -1,20 +1,114 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Gemini AI Chatbot</title>
+  <title>Gemini AI Chatbot Studio</title>
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <div class="container">
-    <h1>Gemini AI Chatbot</h1>
-    <div id="chat-box" class="chat-box"></div>
-    <form id="chat-form">
-      <input type="text" id="user-input" placeholder="Type your message..." autocomplete="off" required />
-      <button type="submit">Send</button>
-    </form>
+  <div class="page">
+    <header class="hero">
+      <p class="eyebrow">Gemini Flash API</p>
+      <h1>AI Chatbot Studio</h1>
+      <p class="subtitle">Buat bot dengan gaya bahasa, domain, dan memory yang bisa diatur untuk demo use case nyata.</p>
+    </header>
+
+    <div class="layout">
+      <section class="panel settings-card">
+        <div class="panel-header">
+          <h2>Pengaturan</h2>
+          <p class="muted">Atur persona dan fokus pengetahuan bot.</p>
+        </div>
+
+        <div class="field">
+          <label for="use-case">Use case</label>
+          <select id="use-case">
+            <option value="customer service bot">Customer service bot</option>
+            <option value="education bot">Education bot</option>
+            <option value="travel assistant">Travel assistant</option>
+            <option value="personal productivity assistant">Personal productivity assistant</option>
+            <option value="general assistant" selected>General assistant</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="style">Gaya bahasa</label>
+          <select id="style">
+            <option value="formal">Formal dan profesional</option>
+            <option value="ramah santai" selected>Ramah dan santai</option>
+            <option value="ringkas dan to the point">Ringkas dan to the point</option>
+            <option value="empatik dan suportif">Empatik dan suportif</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="domain">Domain pengetahuan</label>
+          <input type="text" id="domain" placeholder="Contoh: kesehatan, edukasi, hobi, finansial" />
+          <p class="helper">Kosongkan untuk domain umum.</p>
+        </div>
+
+        <div class="field slider-field">
+          <label for="temperature">Kreativitas</label>
+          <div class="slider-row">
+            <input type="range" id="temperature" min="0.2" max="1.2" step="0.1" value="0.7" />
+            <span id="temperature-value">0.7</span>
+          </div>
+        </div>
+
+        <div class="field toggle-field">
+          <div>
+            <p class="label-title">Memory aktif</p>
+            <p class="helper">Bot mengingat konteks percakapan sebelumnya.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="use-memory" checked />
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="field toggle-field">
+          <div>
+            <p class="label-title">Rekomendasi lanjutan</p>
+            <p class="helper">Tambahkan 2-3 ide follow up setelah jawaban.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="recommendations" checked />
+            <span class="slider"></span>
+          </label>
+        </div>
+      </section>
+
+      <section class="panel chat-card">
+        <div class="chat-header">
+          <div>
+            <h2>Ruang Chat</h2>
+            <p class="muted">Tulis pesan, lalu lihat bot merespons sesuai persona.</p>
+          </div>
+          <button id="clear-chat" type="button" class="ghost">Reset</button>
+        </div>
+
+        <div id="chat-box" class="chat-box">
+          <div class="empty-state">
+            Mulai percakapan untuk melihat jawaban bot di sini.
+          </div>
+        </div>
+
+        <div class="quick-prompts">
+          <button type="button" class="prompt-btn" data-prompt="Buat skrip sapaan untuk customer service toko online.">CS greeting</button>
+          <button type="button" class="prompt-btn" data-prompt="Jelaskan konsep pomodoro untuk pelajar SMA.">Edukasi</button>
+          <button type="button" class="prompt-btn" data-prompt="Buat itinerary 2 hari di Bandung dengan budget terbatas.">Travel</button>
+          <button type="button" class="prompt-btn" data-prompt="Tolong buatkan daftar tugas harian yang rapi untuk pekerja remote.">Produktivitas</button>
+        </div>
+
+        <form id="chat-form" class="chat-form">
+          <input type="text" id="user-input" placeholder="Ketik pesan kamu di sini..." autocomplete="off" required />
+          <button type="submit" id="send-btn">Kirim</button>
+        </form>
+      </section>
+    </div>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>
